@@ -1,4 +1,4 @@
-db.db
 tmp
 db/sqlc
 node_modules
+hello.db
