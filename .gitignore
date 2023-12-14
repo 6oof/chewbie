@@ -2,3 +2,4 @@ tmp
 db/sqlc
 node_modules
 hello.db
+static/main.css
