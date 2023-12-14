@@ -1,4 +1,4 @@
-package helpers
+package stubs
 
 import (
 	"net/http"
@@ -40,7 +40,7 @@ func (v *StructValidator) ValidateAndMapForm(w http.ResponseWriter, r *http.Requ
 	return nil
 }
 
-func (v *StructValidator) ExtractErrors(err error) []FormErrs {
+func (v *StructValidator) ExtractValidationErrors(err error) []FormErrs {
 	var fe []FormErrs
 	for _, err := range err.(validator.ValidationErrors) {
 		cer := FormErrs{

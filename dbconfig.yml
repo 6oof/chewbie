@@ -1,4 +1,4 @@
 development:
   dialect: sqlite3
-  datasource: db.db
+  datasource: hello.db
   dir: db/migrations

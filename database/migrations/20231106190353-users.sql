@@ -1,4 +1,3 @@
-
 -- +migrate Up
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
