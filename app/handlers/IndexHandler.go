@@ -9,6 +9,7 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	t := minitemp.PageTemplate{
 		Files: []string{"layout", "index/index"},
+		Seo:   minitemp.Seo{Title: "Home Page"},
 		Data:  nil,
 	}
 

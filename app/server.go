@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/6oof/miniweb-base/app/helpers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/csrf"
@@ -60,40 +61,51 @@ func MbinServe(port string) {
 		Handler:      c.Router,
 	}
 
-	// Listen for syscall signals for process to interrupt/quit
-	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	appEnv := helpers.Env("APP_ENV", "development")
+	appPort := helpers.Env("PORT", "8080")
 
-	go func() {
+	if appEnv == "production" {
+		// Listen for syscall signals for process to interrupt/quit
+		sig := make(chan os.Signal, 1)
+		signal.Notify(sig, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+		go func() {
+			<-sig
+
+			// Create a deadline to wait for.
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+			defer cancel()
+
+			// Trigger graceful shutdown
+			err := server.Shutdown(ctx)
+			if err != nil {
+				log.Println(err)
+			}
+		}()
+
+		// Start the server in a goroutine so that it doesn't block.
+		go func() {
+			err := server.ListenAndServe()
+			if err != nil && err != http.ErrServerClosed {
+				log.Fatal(err)
+			}
+		}()
+
+		log.Printf("Server running in graceful mode on port %s\n", appPort)
+
+		// Block until an interrupt signal is received.
 		<-sig
+		log.Println("Shutting down...")
 
-		// Create a deadline to wait for.
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-		defer cancel()
-
-		// Trigger graceful shutdown
-		err := server.Shutdown(ctx)
-		if err != nil {
-			log.Println(err)
-		}
-	}()
-
-	// Start the server in a goroutine so that it doesn't block.
-	go func() {
+		// Optionally, you could run server.Shutdown in a goroutine
+		// and block on <-ctx.Done() if your application should wait
+		// for other services to finalize based on context cancellation.
+		log.Println("Server gracefully stopped.")
+	} else {
+		log.Printf("Server running on port %s\n", appPort)
 		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
 		}
-	}()
-
-	log.Printf("Server running on port %s\n", port)
-
-	// Block until an interrupt signal is received.
-	<-sig
-	log.Println("Shutting down...")
-
-	// Optionally, you could run server.Shutdown in a goroutine
-	// and block on <-ctx.Done() if your application should wait
-	// for other services to finalize based on context cancellation.
-	log.Println("Server gracefully stopped.")
+	}
 }

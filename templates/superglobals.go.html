@@ -1,8 +1,10 @@
 {{define "superglobals"}}
-<!-- Pico.css -->
-
+<title>{{.Seo.Name}} {{if .Seo.Title}}• {{.Seo.Title}}{{end}}</title>
+<meta name="description" content="{{if .Seo.Description}}{{.Seo.Description}}{{end}}" />
+{{if .Seo.Keywords}}
+<meta name="keywords" content="{{.Seo.Keywords}}">
+{{end}}
+<link rel="icon" type="image/x-icon" href="/static/assets/favicon.png">
 <link rel="stylesheet" href="/static/main.css">
-
-
 <script src="https://unpkg.com/htmx.org@1.9.8"></script>
 {{end}}

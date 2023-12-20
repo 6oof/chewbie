@@ -2,9 +2,19 @@ package minitemp
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
+
+	"github.com/6oof/miniweb-base/app/helpers"
 )
+
+type Seo struct {
+	Name        string // if none is given it will be taken from .env NAME field
+	Title       string
+	Description string // if none is given it will be taken from .env DESCRIPTION field
+	Keywords    string
+}
 
 // PageTemplate represents a structured template for rendering entire pages. It encapsulates the necessary information to render a page,
 // including the list of template files and additional data to be used in the template execution.
@@ -16,7 +26,8 @@ import (
 //		Data:  nil,
 //	}
 type PageTemplate struct {
-	Files []string    // Relative paths to template files (excluding trailing slash and extension); superglobals are added automatically.
+	Files []string    // Relative paths to template files (excluding trailing slash and extension); superglobals.go.html are added automatically.
+	Seo   Seo         // SEO data
 	Data  interface{} // Data to be used in the template
 }
 
@@ -36,7 +47,7 @@ type FragmentTemplate struct {
 	Data      interface{} // Data to be used in the template
 }
 
-// RenderPage generates the HTML content for the specified PageTemplate and returns it as a string.
+// RenderPage generates the HTML content for the specified PageTemplate and returns it as a string. Any data can be accesed in the template via {{.Data}}
 func (p PageTemplate) RenderPage() string {
 	// Prepend the correct path to the template files
 	for i, v := range p.Files {
@@ -58,8 +69,23 @@ func (p PageTemplate) RenderPage() string {
 		panic(err)
 	}
 
+	// Set default SEO values if not provided
+	if p.Seo.Name == "" {
+		p.Seo.Name = helpers.EnvOrPanic("NAME")
+	}
+	fmt.Print(p.Seo.Name)
+
+	if p.Seo.Description == "" {
+		p.Seo.Description = helpers.Env("DESCRIPTION", "App created with Miniweb")
+	}
+
+	data := map[string]interface{}{
+		"Seo":  p.Seo,
+		"Data": p.Data,
+	}
+
 	var contentBuffer bytes.Buffer
-	err = ts.ExecuteTemplate(&contentBuffer, "layout", p.Data)
+	err = ts.ExecuteTemplate(&contentBuffer, "layout", data)
 
 	return contentBuffer.String()
 }
