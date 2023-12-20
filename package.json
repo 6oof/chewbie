@@ -1,8 +1,22 @@
 {
 	"devDependencies": {
+		"cssnano": "^6.0.2",
+		"esbuild": "^0.19.10",
+		"npm-run-all": "^4.1.5",
+		"postcss": "^8.4.32",
+		"postcss-cli": "^11.0.0",
 		"tailwindcss": "^3.3.6"
 	},
 	"scripts": {
-		"watch": "npx tailwindcss -i ./resources/main.css -o ./static/main.css --watch"
+		"watch:css": "npx tailwindcss -i ./resources/main.css -o ./static/styles/main.css --watch",
+		"watch:js": "esbuild ./resources/scripts/main.js --bundle --sourcemap --outfile=static/scripts/main.js --watch",
+		"build:css": "postcss ./resources/main.css -o ./static/main.css",
+		"build:js": "esbuild ./resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/main.js",
+		"watch": "npm-run-all -p watch:css watch:js",
+		"build": "npm-run-all build:css build:js"
+	},
+	"dependencies": {
+		"alpinejs": "^3.13.3",
+		"htmx.org": "^1.9.9"
 	}
 }

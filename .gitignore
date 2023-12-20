@@ -2,4 +2,5 @@ tmp
 db/sqlc
 node_modules
 hello.db
-static/main.css
+static/styles
+static/scripts
