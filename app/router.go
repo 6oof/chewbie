@@ -5,6 +5,8 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func RegisterRoutes(r *chi.Mux) {
+// RegisterRoutes sets up the routing for the MiniWeb application by defining the routes and associating them with their respective handlers.
+func registerRoutes(r *chi.Mux) {
+	// Define routes and associate them with handlers
 	r.Get("/", handlers.HandleIndex)
 }

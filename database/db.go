@@ -6,8 +6,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Queries represents the compiled SQL queries for interacting with the database.
 var Queries *sqlc.Queries
 
+// NewDB creates a new SQLite database connection with the specified data source name.
+// It also applies additional settings for better performance.
 func NewDB(dataSourceName string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {
@@ -31,6 +34,8 @@ func NewDB(dataSourceName string) (*sql.DB, error) {
 	return db, nil
 }
 
+// InitDB initializes the database by creating a new SQLite database connection and
+// instantiating the compiled SQL queries for the application.
 func InitDB(dataSourceName string) {
 	db, err := NewDB(dataSourceName)
 	if err != nil {
@@ -40,8 +45,6 @@ func InitDB(dataSourceName string) {
 	// Ensure that the database is properly closed when the application exits
 	defer db.Close()
 
+	// Create a new instance of the compiled SQL queries for the application
 	Queries = sqlc.New(db)
-
-	// Perform any additional initialization steps here, such as creating tables or applying migrations.
-	// Make sure to handle any errors that may occur during these steps.
 }

@@ -7,8 +7,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// GetEnvVar retrieves the value of an environmental variable.
+// Env retrieves the value of an environmental variable.
 // If the variable is not set, it returns the default value.
+//
+// Example Usage:
+//
+//	value := Env("KEY_NAME", "default_value")
 func Env(key, defaultValue string) string {
 
 	if value, exists := os.LookupEnv(key); exists {
@@ -17,8 +21,12 @@ func Env(key, defaultValue string) string {
 	return defaultValue
 }
 
-// GetEnvVarOrPanic retrieves the value of an environmental variable.
+// EnvOrPanic retrieves the value of an environmental variable.
 // If the variable is not set, it panics with an error message.
+//
+// Example Usage:
+//
+//	value := EnvOrPanic("KEY_NAME")
 func EnvOrPanic(key string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
@@ -26,7 +34,11 @@ func EnvOrPanic(key string) string {
 	panic(fmt.Sprintf("Environmental variable %s is not set", key))
 }
 
-// Load the .env file
+// LoadEnv loads the .env file.
+//
+// Example Usage:
+//
+//	LoadEnv()
 func LoadEnv() {
 	err := godotenv.Load()
 	if err != nil {

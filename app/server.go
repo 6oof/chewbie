@@ -17,14 +17,16 @@ import (
 	"github.com/gorilla/securecookie"
 )
 
+// MiniWeb represents the main structure for the MiniWeb application, including its router.
 type MiniWeb struct {
 	Router *chi.Mux
 }
 
+// MbinInit initializes the MiniWeb application, sets up middleware, and registers routes.
 func MbinInit() *MiniWeb {
-
 	r := chi.NewRouter()
 
+	// Middleware setup
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Logger)
 	r.Use(compressResponseMiddleware)
@@ -34,9 +36,12 @@ func MbinInit() *MiniWeb {
 	csrfMiddleware := csrf.Protect(csrfKey, csrf.Secure(false), csrf.CookieName("ccsrf")) // Set Secure to true in production
 	r.Use(csrfMiddleware)
 
-	// Add your routes as needed
+	// Static file serving
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	RegisterRoutes(r)
+
+	// Register custom routes
+	registerRoutes(r)
+
 	// Apply CSRF protection to all routes
 	miniWeb := &MiniWeb{
 		Router: r,
@@ -45,10 +50,12 @@ func MbinInit() *MiniWeb {
 	return miniWeb
 }
 
+// compressResponseMiddleware is a middleware function that compresses HTTP responses.
 func compressResponseMiddleware(next http.Handler) http.Handler {
 	return handlers.CompressHandler(next)
 }
 
+// MbinServe starts the MiniWeb server with specified configurations.
 func MbinServe(port string) {
 	c := MbinInit()
 
