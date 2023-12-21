@@ -4,3 +4,4 @@ node_modules
 hello.db
 static/styles
 static/scripts
+.DS_Store

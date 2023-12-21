@@ -10,8 +10,8 @@
 	"scripts": {
 		"watch:css": "npx tailwindcss -i ./resources/main.css -o ./static/styles/main.css --watch",
 		"watch:js": "esbuild ./resources/scripts/main.js --bundle --sourcemap --outfile=static/scripts/main.js --watch",
-		"build:css": "postcss ./resources/main.css -o ./static/main.css",
-		"build:js": "esbuild ./resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/main.js",
+		"build:css": "postcss ./resources/main.css -o ./static/styles/main.css",
+		"build:js": "esbuild ./resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/scripts/main.js",
 		"watch": "npm-run-all -p watch:css watch:js",
 		"build": "npm-run-all build:css build:js"
 	},
