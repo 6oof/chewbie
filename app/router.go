@@ -9,4 +9,6 @@ import (
 func registerRoutes(r *chi.Mux) {
 	// Define routes and associate them with handlers
 	r.Get("/", handlers.HandleIndex)
+
+	r.Get("/*", handlers.HandleNotFound)
 }

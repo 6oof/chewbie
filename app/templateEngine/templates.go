@@ -53,7 +53,7 @@ type FragmentTemplate struct {
 }
 
 // RenderPage generates the HTML content for the specified PageTemplate and returns it as a string. Any data can be accesed in the template via {{.Data}}
-func (p PageTemplate) RenderPage() string {
+func (p PageTemplate) RenderPage() (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Components {
 		p.Components[i] = "./templates/components/" + v + ".go.html"
@@ -81,7 +81,7 @@ func (p PageTemplate) RenderPage() string {
 	// Parse the template files
 	ts, err := ts.ParseFiles(completeFiles...)
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("error parsing template files: %v", err)
 	}
 
 	// Set default SEO values if not provided
@@ -102,12 +102,17 @@ func (p PageTemplate) RenderPage() string {
 	var contentBuffer bytes.Buffer
 	err = ts.ExecuteTemplate(&contentBuffer, "layout", data)
 
-	return contentBuffer.String()
+	return contentBuffer.String(), nil
 }
 
 // RenderPageAndSend generates the HTML content for the specified PageTemplate and sends it as an HTTP response.
 func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter) {
-	html := p.RenderPage()
+	html, err := p.RenderPage()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(fmt.Sprint(err)))
+	}
 	// Send the HTML response
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/html")
@@ -115,7 +120,7 @@ func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter) {
 }
 
 // RenderFragment generates the HTML content for the specified FragmentTemplate and returns it as a string.
-func (p FragmentTemplate) RenderFragment() string {
+func (p FragmentTemplate) RenderFragment() (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Files {
 		p.Files[i] = "./templates/" + v + ".go.html"
@@ -130,18 +135,23 @@ func (p FragmentTemplate) RenderFragment() string {
 	// Parse the template files
 	ts, err := ts.ParseFiles(p.Files...)
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("error parsing template files: %v", err)
 	}
 
 	var contentBuffer bytes.Buffer
 	err = ts.ExecuteTemplate(&contentBuffer, p.BlockName, p.Data)
 
-	return contentBuffer.String()
+	return contentBuffer.String(), nil
 }
 
 // RenderFragmentAndSend generates the HTML content for the specified FragmentTemplate and sends it as an HTTP response.
 func (p FragmentTemplate) RenderFragmentAndSend(w http.ResponseWriter) {
-	html := p.RenderFragment()
+	html, err := p.RenderFragment()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(fmt.Sprint(err)))
+	}
 	// Send the HTML response
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/html")
