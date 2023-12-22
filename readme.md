@@ -38,7 +38,6 @@ MiniWeb uses [sql-migrate](https://github.com/rubenv/sql-migrate) for database m
 The application uses environment variables for configuration. Key environment variables include:
 
 - `PORT`: The port on which the server listens.
-- `APP_ENV`: The environment mode (e.g., "development" or "production").
 - (Custom variables based on your application needs.)
 
 Refer to the [Env Helper Documentation](#) for more details.

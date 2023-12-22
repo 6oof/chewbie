@@ -10,9 +10,9 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Define the page template for the home page
 	t := minitemp.PageTemplate{
-		Files: []string{"layout", "index/index"},
-		Seo:   minitemp.Seo{Title: "Home Page"},
-		Data:  nil,
+		Page: "index",
+		Seo:  minitemp.Seo{Title: "Home Page"},
+		Data: nil,
 	}
 
 	// Render the page and send it as an HTTP response

@@ -1,0 +1,21 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- <link rel="shortcut icon" href="https://picocss.com/favicon.ico" /> -->
+	{{template "superglobals" .}}
+</head>
+
+<body class="bg-gray-900 min-h-screen flex flex-col justify-between">
+	<!-- Main -->
+	<mai>
+		{{ template "content" . }}
+		</main>
+</body>
+
+</html>
+{{end}}

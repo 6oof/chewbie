@@ -1,7 +1,7 @@
 tmp
 db/sqlc
 node_modules
-hello.db
+mw.db
 static/styles
 static/scripts
 .DS_Store

@@ -16,7 +16,7 @@ func main() {
 	appPort := helpers.EnvOrPanic("PORT")
 
 	// Initialize the database with the specified file
-	db.InitDB("hello.db")
+	db.InitDB("mw.db")
 
 	// Start the MiniWeb server
 	app.MbinServe(fmt.Sprintf(":%s", appPort))

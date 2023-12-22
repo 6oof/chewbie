@@ -22,13 +22,18 @@ type Seo struct {
 // Example Usage:
 //
 //	minitemp.PageTemplate{
-//		Files: []string{"layout", "index/index"},
-//		Data:  nil,
+//		Layout:     "layout",
+//		Page:       "index",
+//		Components: []string{"navbar", "footer"},
+//		Seo:        minitemp.Seo{Title: "Home Page"},
+//		Data:       nil,
 //	}
 type PageTemplate struct {
-	Files []string    // Relative paths to template files (excluding trailing slash and extension); superglobals.go.html are added automatically.
-	Seo   Seo         // SEO data
-	Data  interface{} // Data to be used in the template
+	Layout     string      // Optional layout file to be rendered form ./templates/layouts without file extension;
+	Page       string      //File name of the page to be rendered inside ./templates/pages without file extension;
+	Components []string    // Relative paths to template files of components inside ./templates/components without file extension;
+	Seo        Seo         // SEO data
+	Data       interface{} // Data to be used in the template
 }
 
 // FragmentTemplate represents a template for rendering fragments of a page. It specifies the list of template files, the outermost block
@@ -37,12 +42,12 @@ type PageTemplate struct {
 // Example Usage:
 //
 //	minitemp.FragmentTemplate{
-//		Files:     []string{"layout", "index/index"},
-//		BlockName: "layout",
+//		Files:     []string{"components/navbar"}
+//		BlockName: "navbar",
 //		Data:      nil,
 //	}
 type FragmentTemplate struct {
-	Files     []string    // Relative paths to template files (excluding trailing slash and extension); superglobals are added automatically.
+	Files     []string    // Relative paths to template files (excluding trailing slash and extension);
 	BlockName string      // The name of the outermost defined block to be rendered
 	Data      interface{} // Data to be used in the template
 }
@@ -50,12 +55,22 @@ type FragmentTemplate struct {
 // RenderPage generates the HTML content for the specified PageTemplate and returns it as a string. Any data can be accesed in the template via {{.Data}}
 func (p PageTemplate) RenderPage() string {
 	// Prepend the correct path to the template files
-	for i, v := range p.Files {
-		p.Files[i] = "./templates/" + v + ".go.html"
+	for i, v := range p.Components {
+		p.Components[i] = "./templates/components/" + v + ".go.html"
 	}
+
+	// Set default layout if not provided
+	if p.Layout == "" {
+		p.Layout = "./templates/layouts/layout.go.html"
+	} else {
+		p.Layout = "./templates/layouts/" + p.Layout + ".go.html"
+	}
+
+	p.Page = "./templates/pages/" + p.Page + ".go.html"
+
 	// Include the superglobals file
 	sg := "./templates/superglobals.go.html"
-	completeFiles := append([]string{sg}, p.Files...)
+	completeFiles := append([]string{sg, p.Layout, p.Page}, p.Components...)
 
 	// Create a new template instance
 	ts := template.New("")
