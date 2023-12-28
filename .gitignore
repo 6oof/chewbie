@@ -1,7 +1,7 @@
 tmp
-db/sqlc
 node_modules
 mw.db
+.env
 static/styles
 static/scripts
 .DS_Store

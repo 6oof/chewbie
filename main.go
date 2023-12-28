@@ -5,7 +5,8 @@ import (
 
 	"github.com/6oof/miniweb-base/app"
 	"github.com/6oof/miniweb-base/app/helpers"
-	db "github.com/6oof/miniweb-base/database"
+	// Uncomment this line to use the default database file (1/2)
+	// db "github.com/6oof/miniweb-base/database"
 )
 
 func main() {
@@ -16,7 +17,8 @@ func main() {
 	appPort := helpers.EnvOrPanic("PORT")
 
 	// Initialize the database with the specified file
-	db.InitDB("mw.db")
+	// uncomment this line to use the default database file (2/2)
+	// db.InitDB("mw.db")
 
 	// Start the MiniWeb server
 	app.MbinServe(fmt.Sprintf(":%s", appPort))

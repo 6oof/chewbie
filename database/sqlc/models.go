@@ -4,14 +4,8 @@
 
 package sqlc
 
-import (
-	"time"
-)
+import ()
 
-type User struct {
-	ID           int64
-	Email        string
-	PasswordHash string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+type Example struct {
+	ID int64
 }

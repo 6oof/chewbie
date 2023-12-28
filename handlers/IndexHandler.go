@@ -3,15 +3,15 @@ package handlers
 import (
 	"net/http"
 
-	minitemp "github.com/6oof/miniweb-base/app/templateEngine"
+	"github.com/6oof/miniweb-base/app/templateEngine"
 )
 
 // HandleIndex is the handler function for the "/" route, rendering the home page.
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Define the page template for the home page
-	t := minitemp.PageTemplate{
+	t := mwtemp.PageTemplate{
 		Page: "index",
-		Seo:  minitemp.Seo{Title: "Home Page"},
+		Seo:  mwtemp.Seo{Title: "Home Page"},
 		Data: nil,
 	}
 

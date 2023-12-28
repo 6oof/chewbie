@@ -1,4 +1,4 @@
-package minitemp
+package mwtemp
 
 import (
 	"bytes"
@@ -29,9 +29,9 @@ type Seo struct {
 //		Data:       nil,
 //	}
 type PageTemplate struct {
-	Layout     string      // Optional layout file to be rendered form ./templates/layouts without file extension;
-	Page       string      //File name of the page to be rendered inside ./templates/pages without file extension;
-	Components []string    // Relative paths to template files of components inside ./templates/components without file extension;
+	Layout     string      // Optional layout file to be rendered form ./views/layouts without file extension;
+	Page       string      //File name of the page to be rendered inside ./views/pages without file extension;
+	Components []string    // Relative paths to template files of components inside ./views/components without file extension;
 	Seo        Seo         // SEO data
 	Data       interface{} // Data to be used in the template
 }
@@ -56,20 +56,20 @@ type FragmentTemplate struct {
 func (p PageTemplate) RenderPage() (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Components {
-		p.Components[i] = "./templates/components/" + v + ".go.html"
+		p.Components[i] = "./views/components/" + v + ".go.html"
 	}
 
 	// Set default layout if not provided
 	if p.Layout == "" {
-		p.Layout = "./templates/layouts/layout.go.html"
+		p.Layout = "./views/layouts/layout.go.html"
 	} else {
-		p.Layout = "./templates/layouts/" + p.Layout + ".go.html"
+		p.Layout = "./views/layouts/" + p.Layout + ".go.html"
 	}
 
-	p.Page = "./templates/pages/" + p.Page + ".go.html"
+	p.Page = "./views/pages/" + p.Page + ".go.html"
 
 	// Include the superglobals file
-	sg := "./templates/superglobals.go.html"
+	sg := "./views/superglobals.go.html"
 	completeFiles := append([]string{sg, p.Layout, p.Page}, p.Components...)
 
 	// Create a new template instance
@@ -123,7 +123,7 @@ func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter) {
 func (p FragmentTemplate) RenderFragment() (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Files {
-		p.Files[i] = "./templates/" + v + ".go.html"
+		p.Files[i] = "./views/" + v + ".go.html"
 	}
 
 	// Create a new template instance

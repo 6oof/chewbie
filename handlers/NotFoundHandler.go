@@ -3,14 +3,14 @@ package handlers
 import (
 	"net/http"
 
-	minitemp "github.com/6oof/miniweb-base/app/templateEngine"
+	"github.com/6oof/miniweb-base/app/templateEngine"
 )
 
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {
-	t := minitemp.PageTemplate{
+	t := mwtemp.PageTemplate{
 		Layout: "empty",
 		Page:   "error",
-		Seo: minitemp.Seo{
+		Seo: mwtemp.Seo{
 			Title: "Page Not Found",
 		},
 		Data: map[string]interface{}{

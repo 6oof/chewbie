@@ -1,4 +1,4 @@
 development:
   dialect: sqlite3
   datasource: mw.db
-  dir: db/migrations
+  dir: database/migrations

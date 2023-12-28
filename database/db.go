@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 	"github.com/6oof/miniweb-base/database/sqlc"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 // Queries represents the compiled SQL queries for interacting with the database.
@@ -12,7 +12,7 @@ var Queries *sqlc.Queries
 // NewDB creates a new SQLite database connection with the specified data source name.
 // It also applies additional settings for better performance.
 func NewDB(dataSourceName string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", dataSourceName)
+	db, err := sql.Open("sqlite", dataSourceName) // Updated driver name
 	if err != nil {
 		return nil, err
 	}

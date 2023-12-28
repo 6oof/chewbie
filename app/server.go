@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -89,7 +90,11 @@ func MbinServe(port string) {
 		}
 	}()
 
-	log.Printf("Server running on port %s\n", appPort)
+	yellow := "\033[33m"
+	// ANSI escape code to reset text color
+	reset := "\033[0m"
+
+	fmt.Printf("%sServer running on port %s%s (If you're using the provided docker-compose visit http://localhost:8080)\n", yellow, appPort, reset)
 
 	// Block until an interrupt signal is received.
 	<-sig

@@ -1,9 +1,9 @@
-package minitemp
+package mwtemp
 
 import (
 	"html/template"
 
-	templatefuncs "github.com/6oof/miniweb-base/app/templateEngine/funcs"
+	"github.com/6oof/miniweb-base/app/templateEngine/templatefuncs"
 )
 
 // CustomTemplateFuncs is a FuncMap that holds custom template functions used in rendering templates.
