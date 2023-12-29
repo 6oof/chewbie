@@ -4,4 +4,5 @@ mw.db
 .env
 static/styles
 static/scripts
+logfile.txt
 .DS_Store

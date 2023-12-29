@@ -13,6 +13,7 @@ import (
 	"github.com/6oof/miniweb-base/app/helpers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/securecookie"
 )
@@ -27,8 +28,20 @@ func MbinInit() *MiniWeb {
 	r := chi.NewRouter()
 
 	// Middleware setup
-	r.Use(middleware.Recoverer)
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	// CORS protection
+	corsMiddleware := cors.Handler(cors.Options{
+		AllowedOrigins:   []string{helpers.Env("URL", "*")}, // Use this to allow specific origin hosts
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximumkvalue not ignored by any of major browsers
+		// Debug:            true,
+	})
+	r.Use(corsMiddleware)
 
 	// CSRF protection
 	csrfKey := securecookie.GenerateRandomKey(32)
@@ -94,14 +107,16 @@ func MbinServe(port string) {
 	// ANSI escape code to reset text color
 	reset := "\033[0m"
 
-	fmt.Printf("%sServer running on port %s%s (If you're using the provided docker-compose visit http://localhost:8080)\n", yellow, appPort, reset)
+	fmt.Println("")
+	fmt.Printf("%s>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%s\n", yellow, reset)
+	fmt.Printf("%s /\\  /\\\\  /\\  /%s\n", yellow, reset)
+	fmt.Printf("%s/  \\/  \\\\/  \\/%s\n", yellow, reset)
+	fmt.Printf("%sServer running on port %s%s (http://localhost:%s)\n", yellow, appPort, reset, appPort)
+	fmt.Println("Using docker-compose? visit http://localhost:8080)")
+	fmt.Printf("%s<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<%s\n", yellow, reset)
+	fmt.Println("")
 
 	// Block until an interrupt signal is received.
 	<-sig
 	log.Println("Shutting down...")
-
-	// Optionally, you could run server.Shutdown in a goroutine
-	// and block on <-ctx.Done() if your application should wait
-	// for other services to finalize based on context cancellation.
-	log.Println("Server gracefully stopped.")
 }

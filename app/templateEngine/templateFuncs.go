@@ -10,4 +10,5 @@ import (
 var CustomTemplateFuncs = template.FuncMap{
 	// An example - implementation can be found in app/templateEngine/funcs/customUppercase.go
 	"CurrentYear": templatefuncs.CurrentYear,
+	"ProjectName": templatefuncs.ProjectName,
 }
