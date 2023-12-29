@@ -12,11 +12,10 @@
 		"watch:js": "esbuild ./resources/scripts/main.js --bundle --sourcemap --outfile=static/scripts/main.js --watch",
 		"build:css": "postcss ./resources/styles/main.css -o ./static/styles/main.css",
 		"build:js": "esbuild ./resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/scripts/main.js",
-		"watch": "npm-run-all -p watch:css watch:js",
+		"dev": "npm-run-all -p watch:css watch:js",
 		"build": "npm-run-all build:css build:js"
 	},
 	"dependencies": {
-		"alpinejs": "^3.13.3",
 		"htmx.org": "^1.9.9"
 	}
 }

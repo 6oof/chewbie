@@ -10,11 +10,12 @@ import (
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Define the page template for the home page
 	t := mwtemp.PageTemplate{
-		Page: "index",
-		Seo:  mwtemp.Seo{Title: "Home Page"},
-		Data: nil,
+		Page:       "index",
+		Seo:        mwtemp.Seo{Title: "Home Page"},
+		Components: []string{"showcaseForm"},
+		Data:       nil,
 	}
 
 	// Render the page and send it as an HTTP response
-	t.RenderPageAndSend(w)
+	t.RenderPageAndSend(w, r)
 }

@@ -19,5 +19,5 @@ func HandleNotFound(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	t.RenderPageAndSend(w)
+	t.RenderPageAndSend(w, r)
 }

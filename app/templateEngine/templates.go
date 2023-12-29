@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/6oof/miniweb-base/app/helpers"
+	"github.com/gorilla/csrf"
 )
 
 type Seo struct {
@@ -53,7 +54,7 @@ type FragmentTemplate struct {
 }
 
 // RenderPage generates the HTML content for the specified PageTemplate and returns it as a string. Any data can be accesed in the template via {{.Data}}
-func (p PageTemplate) RenderPage() (string, error) {
+func (p PageTemplate) RenderPage(r *http.Request) (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Components {
 		p.Components[i] = "./views/components/" + v + ".go.html"
@@ -97,17 +98,21 @@ func (p PageTemplate) RenderPage() (string, error) {
 	data := map[string]interface{}{
 		"Seo":  p.Seo,
 		"Data": p.Data,
+		"CSRF": csrf.TemplateField(r),
 	}
 
 	var contentBuffer bytes.Buffer
 	err = ts.ExecuteTemplate(&contentBuffer, "layout", data)
+	if err != nil {
+		return "", fmt.Errorf("error executing template: %v", err)
+	}
 
 	return contentBuffer.String(), nil
 }
 
 // RenderPageAndSend generates the HTML content for the specified PageTemplate and sends it as an HTTP response.
-func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter) {
-	html, err := p.RenderPage()
+func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter, r *http.Request) {
+	html, err := p.RenderPage(r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "text/html")
@@ -120,7 +125,7 @@ func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter) {
 }
 
 // RenderFragment generates the HTML content for the specified FragmentTemplate and returns it as a string.
-func (p FragmentTemplate) RenderFragment() (string, error) {
+func (p FragmentTemplate) RenderFragment(r *http.Request) (string, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Files {
 		p.Files[i] = "./views/" + v + ".go.html"
@@ -139,14 +144,23 @@ func (p FragmentTemplate) RenderFragment() (string, error) {
 	}
 
 	var contentBuffer bytes.Buffer
-	err = ts.ExecuteTemplate(&contentBuffer, p.BlockName, p.Data)
+
+	data := map[string]interface{}{
+		"Data": p.Data,
+		"CSRF": csrf.TemplateField(r),
+	}
+
+	err = ts.ExecuteTemplate(&contentBuffer, p.BlockName, data)
+	if err != nil {
+		return "", fmt.Errorf("error executing template: %v", err)
+	}
 
 	return contentBuffer.String(), nil
 }
 
 // RenderFragmentAndSend generates the HTML content for the specified FragmentTemplate and sends it as an HTTP response.
-func (p FragmentTemplate) RenderFragmentAndSend(w http.ResponseWriter) {
-	html, err := p.RenderFragment()
+func (p FragmentTemplate) RenderFragmentAndSend(w http.ResponseWriter, r *http.Request) {
+	html, err := p.RenderFragment(r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "text/html")

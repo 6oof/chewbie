@@ -15,7 +15,6 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/gorilla/csrf"
-	"github.com/gorilla/securecookie"
 )
 
 // MiniWeb represents the main structure for the MiniWeb application, including its router.
@@ -35,17 +34,25 @@ func MbinInit() *MiniWeb {
 	corsMiddleware := cors.Handler(cors.Options{
 		AllowedOrigins:   []string{helpers.Env("URL", "*")}, // Use this to allow specific origin hosts
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
-		MaxAge:           300, // Maximumkvalue not ignored by any of major browsers
+		MaxAge:           300,
 		// Debug:            true,
 	})
 	r.Use(corsMiddleware)
 
 	// CSRF protection
-	csrfKey := securecookie.GenerateRandomKey(32)
-	csrfMiddleware := csrf.Protect(csrfKey, csrf.Secure(false), csrf.CookieName("ccsrf")) // Set Secure to true in production
+	key := []byte(helpers.EnvOrPanic("KEY"))
+	if len(key) < 1 {
+		panic("App key must be set in .env file")
+	}
+	csrfMiddleware := csrf.Protect([]byte(key),
+		csrf.Secure(false),
+		csrf.ErrorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusForbidden)
+			w.Write([]byte(`{"message": "Forbidden - CSRF token invalid"}`))
+		}))) // Set Secure to true in production
 	r.Use(csrfMiddleware)
 
 	// Static file serving

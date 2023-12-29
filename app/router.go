@@ -10,6 +10,7 @@ func registerRoutes(r *chi.Mux) {
 
 	// Define routes and associate them with handlers
 	r.Get("/", handlers.HandleIndex)
+	r.Post("/showcase-form", handlers.HandleShowcaseFormPost)
 
 	// This route should be the last route defined at all times
 	r.Get("/*", handlers.HandleNotFound)
