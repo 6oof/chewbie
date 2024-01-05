@@ -12,7 +12,7 @@ import "bytes"
 
 import (
 	"github.com/6oof/miniweb-base/app/helpers"
-	"github.com/6oof/miniweb-base/views"
+	"github.com/6oof/miniweb-base/app/views"
 )
 
 func EmptyLayout(seo helpers.Seo) templ.Component {

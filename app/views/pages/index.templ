@@ -1,9 +1,9 @@
 package pages
 
-import "github.com/6oof/miniweb-base/views/layouts"
 import "github.com/6oof/miniweb-base/app/helpers"
-import "github.com/6oof/miniweb-base/views/components"
 import "html/template"
+import "github.com/6oof/miniweb-base/app/views/components"
+import "github.com/6oof/miniweb-base/app/views/layouts"
 
 templ Index(seo helpers.Seo, csrf template.HTML, nameError, result  string) {
 	@layouts.Layout(seo) {

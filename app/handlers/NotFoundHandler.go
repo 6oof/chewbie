@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/6oof/miniweb-base/app/helpers"
-	"github.com/6oof/miniweb-base/views/pages"
+	"github.com/6oof/miniweb-base/app/views/pages"
 )
 
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {

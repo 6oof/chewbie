@@ -8,10 +8,10 @@
 		"tailwindcss": "^3.3.6"
 	},
 	"scripts": {
-		"watch:css": "npx tailwindcss -i ./resources/styles/main.css -o ./static/styles/main.css --watch",
-		"watch:js": "esbuild ./resources/scripts/main.js --bundle --sourcemap --outfile=static/scripts/main.js --watch",
-		"build:css": "postcss ./resources/styles/main.css -o ./static/styles/main.css",
-		"build:js": "esbuild ./resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/scripts/main.js",
+		"watch:css": "npx tailwindcss -i ./app/resources/styles/main.css -o ./static/styles/main.css --watch",
+		"watch:js": "esbuild ./app/resources/scripts/main.js --bundle --sourcemap --outfile=static/scripts/main.js --watch",
+		"build:css": "postcss ./app/resources/styles/main.css -o ./static/styles/main.css",
+		"build:js": "esbuild ./app/resources/scripts/main.js --bundle --minify --sourcemap --outfile=static/scripts/main.js",
 		"dev": "npm-run-all -p watch:css watch:js",
 		"build": "npm-run-all build:css build:js"
 	},

@@ -10,10 +10,10 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/6oof/miniweb-base/views/layouts"
 import "github.com/6oof/miniweb-base/app/helpers"
-import "github.com/6oof/miniweb-base/views/components"
 import "html/template"
+import "github.com/6oof/miniweb-base/app/views/components"
+import "github.com/6oof/miniweb-base/app/views/layouts"
 
 func Index(seo helpers.Seo, csrf template.HTML, nameError, result string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {

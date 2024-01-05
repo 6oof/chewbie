@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/6oof/miniweb-base/handlers"
+	"github.com/6oof/miniweb-base/app/handlers"
 	"github.com/go-chi/chi/v5"
 )
 
