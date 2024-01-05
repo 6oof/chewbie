@@ -1,0 +1,17 @@
+package views
+
+import "github.com/6oof/miniweb-base/app/helpers"
+
+templ SuperGlobals(seo helpers.Seo) {
+	<title>
+		{ seo.Name }
+		if len(seo.Title) > 0 {
+			• { seo.Title }
+		}
+	</title>
+	<meta name="description" content="{seo.Description}"/>
+	<meta name="keywords" content="{seo.Keywords}"/>
+	<link rel="icon" type="image/x-icon" href="/static/assets/favicon.png"/>
+	<link rel="stylesheet" href="/static/styles/main.css"/>
+	<script defer type="module" src="/static/scripts/main.js"></script>
+}

@@ -3,6 +3,7 @@ FROM golang:1.21-alpine
 
 WORKDIR /app
 
+RUN go install github.com/a-h/templ/cmd/templ@latest 
 RUN go install github.com/cosmtrek/air@latest
 
 COPY go.mod go.sum ./

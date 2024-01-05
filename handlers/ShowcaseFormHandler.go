@@ -1,18 +1,16 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
-	mwtemp "github.com/6oof/miniweb-base/app/templateEngine"
+	"github.com/6oof/miniweb-base/views/components"
+	"github.com/gorilla/csrf"
 )
 
-type ShowcaseForm struct {
-	Name string
-}
-
-type Response struct {
-	Result string
-	Errors map[string]string
+type ShowcaseFormData struct {
+	Result    string
+	NameError string
 }
 
 func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
@@ -21,12 +19,10 @@ func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Sorry, something went wrong", http.StatusInternalServerError)
 	}
 
-	res := Response{
-		Errors: map[string]string{},
-	}
+	res := ShowcaseFormData{}
 
 	if len(r.PostForm.Get("Name")) < 1 {
-		res.Errors["Name"] = "Name is required"
+		res.NameError = "Name is required"
 	} else {
 		if r.PostForm.Get("Name") == "Bruce Wayne" {
 			res.Result = "You're Batman"
@@ -34,13 +30,7 @@ func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
 			res.Result = "You're not Batman"
 		}
 	}
-
-	t := mwtemp.FragmentTemplate{
-		Files:     []string{"components/showcaseForm"},
-		BlockName: "showcaseForm",
-		Data:      res,
-	}
-
-	t.RenderFragmentAndSend(w, r)
+	frag := components.ShowcaseForm(csrf.TemplateField(r), res.NameError, res.Result)
+	frag.Render(context.Background(), w)
 
 }

@@ -1,0 +1,24 @@
+package layouts
+
+import (
+	"github.com/6oof/miniweb-base/app/helpers"
+	"github.com/6oof/miniweb-base/views"
+)
+
+templ EmptyLayout(seo helpers.Seo) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<!-- <link rel="shortcut icon" href="https://picocss.com/favicon.ico" /> -->
+			@views.SuperGlobals(seo)
+		</head>
+		<body class="bg-gray-900 min-h-screen flex flex-col justify-between">
+			<!-- Main -->
+			<main>
+				{ children... }
+			</main>
+		</body>
+	</html>
+}
