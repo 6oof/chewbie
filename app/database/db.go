@@ -2,7 +2,8 @@ package db
 
 import (
 	"database/sql"
-	"github.com/6oof/miniweb-base/database/sqlc"
+
+	"github.com/6oof/miniweb-base/app/database/sqlc"
 	_ "modernc.org/sqlite"
 )
 

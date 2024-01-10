@@ -13,6 +13,9 @@ func main() {
 	// Load environment variables from the .env file
 	helpers.LoadEnv()
 
+	// Int logger
+	helpers.InitLogger("log.txt")
+
 	// Get the application port from the environment variables or panic if not set
 	appPort := helpers.Env("PORT", ":3003")
 

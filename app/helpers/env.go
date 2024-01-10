@@ -35,6 +35,7 @@ func EnvOrPanic(key string) string {
 }
 
 // LoadEnv loads the .env file.
+// IT WILL ONLY WORK IF USED IN THE SAME DIRECTORY AS THE .env FILE.
 //
 // Example Usage:
 //
