@@ -1,5 +1,3 @@
-// logger_test.go
-
 package helpers
 
 import (
@@ -75,7 +73,7 @@ func TestConcurrentLogging(t *testing.T) {
 	var wg sync.WaitGroup
 
 	// Number of goroutines to simulate concurrent access
-	numGoroutines := 10
+	numGoroutines := 100
 
 	// Simulate concurrent log entries
 	for i := 0; i < numGoroutines; i++ {
