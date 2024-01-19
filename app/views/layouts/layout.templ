@@ -16,30 +16,14 @@ templ Layout(seo helpers.Seo) {
 			<!-- <link rel="shortcut icon" href="https://picocss.com/favicon.ico" /> -->
 			@views.SuperGlobals(seo)
 		</head>
-		<body class="bg-gray-900 min-h-screen flex flex-col justify-between">
+		<body class="bg-gray-900 font-sans flex flex-col justify-between h-screen p-4">
 			<!-- Main -->
 			<main>
 				{ children... }
 			</main>
-			<footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-				<div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-					<!-- example of using a custom template function defined in app/templateEngine -->
-					<span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-						© { strconv.Itoa(time.Now().Year()) }
-						<a
-							href="/"
-							class="hover:underline"
-						>{ helpers.Env("NAME", "minweb") }</a>. All Rights
-						Reserved.
-					</span>
-					<ul
-						class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0"
-					>
-						<li>
-							<a href="#" class="hover:underline">Github</a>
-						</li>
-					</ul>
-				</div>
+			<footer class="p-4 bg-gray-800 text-slate-500 flex justify-between rounded-lg">
+				<p class="capitalize text-md">© { strconv.Itoa(time.Now().Year()) } { helpers.Env("NAME", "minweb") }. All rights reserved</p>
+				<p class="text-md"><a href="#" class="hover:text-slate-400">Github</a></p>
 			</footer>
 		</body>
 	</html>
