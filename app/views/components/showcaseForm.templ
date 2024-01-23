@@ -8,7 +8,7 @@ templ ShowcaseForm(csrf template.HTML, nameError , result string) {
 			@templ.Raw(csrf)
 			<label for="name" class="block mb-2 font-medium text-gray-900 dark:text-white">
 				A quick
-				and dirty example of HTMX Tailwind and MinWeb working together
+				and dirty example of HTMX and go:
 			</label>
 			<input
 				type="text"
@@ -32,7 +32,7 @@ templ ShowcaseForm(csrf template.HTML, nameError , result string) {
 			</div>
 		}
 		if len(nameError) > 0 {
-			<div class="text-red-700">{ nameError }</div>
+			<div class="text-red-700 mt-4">{ nameError }</div>
 		}
 	</div>
 }

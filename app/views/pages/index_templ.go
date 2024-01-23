@@ -34,7 +34,7 @@ func Index(seo helpers.Seo, csrf template.HTML, nameError, result string) templ.
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"bg-white dark:bg-gray-900 text-center mt-16\"><div class=\"grid max-w-screen-xl px-4 py-8 mx-auto\"><div class=\"m-auto place-self-center \"><img class=\"max-h-16 md:max-h-24 m-auto mb-4\" src=\"static/assets/logo.png\"><h1 class=\"max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-primary\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"bg-white dark:bg-gray-900 text-center mt-16\"><div class=\"grid max-w-screen-xl px-4 py-8 mx-auto\"><div class=\"m-auto place-self-center \"><img class=\"max-h-16 m-auto mb-8\" src=\"static/assets/logo.png\"><h1 class=\"max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-primary\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
