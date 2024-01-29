@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/6oof/miniweb-base/app/helpers"
-	"github.com/6oof/miniweb-base/app/views/pages"
+	"github.com/6oof/minweb/app/helpers"
+	"github.com/6oof/minweb/app/views/pages"
 )
 
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {

@@ -10,8 +10,8 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/6oof/miniweb-base/app/helpers"
-import "github.com/6oof/miniweb-base/app/views/layouts"
+import "github.com/6oof/minweb/app/helpers"
+import "github.com/6oof/minweb/app/views/layouts"
 
 func ErrorPage(seo helpers.Seo, code, message string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {

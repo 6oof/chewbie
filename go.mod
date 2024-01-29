@@ -1,4 +1,4 @@
-module github.com/6oof/miniweb-base
+module github.com/6oof/minweb
 
 go 1.20
 

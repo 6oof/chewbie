@@ -11,8 +11,8 @@ import "io"
 import "bytes"
 
 import (
-	"github.com/6oof/miniweb-base/app/helpers"
-	"github.com/6oof/miniweb-base/app/views"
+	"github.com/6oof/minweb/app/helpers"
+	"github.com/6oof/minweb/app/views"
 	"strconv"
 	"time"
 )

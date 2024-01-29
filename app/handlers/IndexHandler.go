@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/6oof/miniweb-base/app/helpers"
-	"github.com/6oof/miniweb-base/app/views/components"
-	"github.com/6oof/miniweb-base/app/views/pages"
+	"github.com/6oof/minweb/app/helpers"
+	"github.com/6oof/minweb/app/views/components"
+	"github.com/6oof/minweb/app/views/pages"
 	"github.com/gorilla/csrf"
 )
 

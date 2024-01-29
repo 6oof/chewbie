@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/6oof/miniweb-base/app"
-	"github.com/6oof/miniweb-base/app/helpers"
+	"github.com/6oof/minweb/app"
+	"github.com/6oof/minweb/app/helpers"
 	// Uncomment line below to use the default database file (1/2)
-	// db "github.com/6oof/miniweb-base/database"
+	// db "github.com/6oof/minweb/database"
 )
 
 func main() {

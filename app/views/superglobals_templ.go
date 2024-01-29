@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/6oof/miniweb-base/app/helpers"
+import "github.com/6oof/minweb/app/helpers"
 
 func SuperGlobals(seo helpers.Seo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
