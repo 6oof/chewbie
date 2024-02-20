@@ -1,16 +1,23 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
-	"github.com/6oof/minweb/app/helpers"
-	"github.com/6oof/minweb/app/views/pages"
+	mwtemp "github.com/6oof/minweb/app/helpers/templateEngine"
 )
 
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {
-	seo := helpers.BaseSeo()
-	seo.Title = "404"
-	pg := pages.ErrorPage(seo, "404", "Sorry, the page you are looking for does not exist.")
-	pg.Render(context.Background(), w)
+	t := mwtemp.PageTemplate{
+		Layout: "empty",
+		Page:   "error",
+		Seo: mwtemp.Seo{
+			Title: "Page Not Found",
+		},
+		Data: map[string]interface{}{
+			"code":    404,
+			"message": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+		},
+	}
+
+	t.RenderPageAndSend(w, r)
 }

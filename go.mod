@@ -3,7 +3,7 @@ module github.com/6oof/minweb
 go 1.20
 
 require (
-	github.com/a-h/templ v0.2.513
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/cors v1.2.1
 	github.com/gorilla/csrf v1.7.2
@@ -13,6 +13,7 @@ require (
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect

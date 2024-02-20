@@ -1,0 +1,10 @@
+{{define "superglobals"}}
+<title>{{.Seo.Name}} {{if .Seo.Title}}• {{.Seo.Title}}{{end}}</title>
+<meta name="description" content="{{if .Seo.Description}}{{.Seo.Description}}{{end}}" />
+{{if .Seo.Keywords}}
+<meta name="keywords" content="{{.Seo.Keywords}}">
+{{end}}
+<link rel="icon" type="image/x-icon" href="/static/assets/favicon.png">
+<link rel="stylesheet" href="/static/styles/main.css">
+<script defer type="module" src="/static/scripts/main.js"></script>
+{{end}}

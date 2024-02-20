@@ -1,26 +1,32 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
-	"github.com/6oof/minweb/app/helpers"
-	"github.com/6oof/minweb/app/views/components"
-	"github.com/6oof/minweb/app/views/pages"
-	"github.com/gorilla/csrf"
+	mwtemp "github.com/6oof/minweb/app/helpers/templateEngine"
 )
 
 // HandleIndex is the handler function for the "/" route, rendering the home page.
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Define the page template for the home page
-	seo := helpers.BaseSeo()
-	pg := pages.Index(seo, csrf.TemplateField(r), "", "")
-	pg.Render(context.Background(), w)
+	t := mwtemp.PageTemplate{
+		Page:       "index",
+		Seo:        mwtemp.Seo{Title: "Home Page"},
+		Components: []string{"showcaseForm"},
+		Data:       nil,
+	}
+
+	// Render the page and send it as an HTTP response
+	t.RenderPageAndSend(w, r)
 }
 
-type ShowcaseFormData struct {
-	Result    string
-	NameError string
+type ShowcaseForm struct {
+	Name string
+}
+
+type Response struct {
+	Result string
+	Errors map[string]string
 }
 
 func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
@@ -29,10 +35,12 @@ func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Sorry, something went wrong", http.StatusInternalServerError)
 	}
 
-	res := ShowcaseFormData{}
+	res := Response{
+		Errors: map[string]string{},
+	}
 
 	if len(r.PostForm.Get("Name")) < 1 {
-		res.NameError = "Name is required"
+		res.Errors["Name"] = "Name is required"
 	} else {
 		if r.PostForm.Get("Name") == "Bruce Wayne" {
 			res.Result = "You're Batman"
@@ -40,7 +48,13 @@ func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
 			res.Result = "You're not Batman"
 		}
 	}
-	frag := components.ShowcaseForm(csrf.TemplateField(r), res.NameError, res.Result)
-	frag.Render(context.Background(), w)
+
+	t := mwtemp.FragmentTemplate{
+		Files:     []string{"components/showcaseForm"},
+		BlockName: "showcaseForm",
+		Data:      res,
+	}
+
+	t.RenderFragmentAndSend(w, r)
 
 }
