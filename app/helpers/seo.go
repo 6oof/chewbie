@@ -13,6 +13,9 @@ type Seo struct {
 
 	// Keywords are the meta keywords for the web page.
 	Keywords string
+
+	// Ready is a flag indicating whether the SEO data is ready to be used.
+	Ready bool
 }
 
 // BaseSeo returns a default Seo object with values retrieved from environmental variables.
@@ -31,5 +34,6 @@ func BaseSeo() Seo {
 		Name:        Env("NAME", "Miniweb"),
 		Description: Env("DESCRIPTION", "Miniweb"),
 		// Title and Keywords can be added similarly using Env() for each.
+		Ready: true,
 	}
 }

@@ -3,56 +3,54 @@ package handlers
 import (
 	"net/http"
 
-	mwtemp "github.com/6oof/minweb/app/helpers/templateEngine"
+	"github.com/6oof/minweb/app/helpers"
+	"github.com/6oof/minweb/app/helpers/temp"
 )
 
 // HandleIndex is the handler function for the "/" route, rendering the home page.
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	// Define the page template for the home page
-	t := mwtemp.PageTemplate{
+	seo := helpers.BaseSeo()
+	seo.Title = "Home Page"
+
+	t := temp.PageTemplate{
 		Page:       "index",
-		Seo:        mwtemp.Seo{Title: "Home Page"},
 		Components: []string{"showcaseForm"},
-		Data:       nil,
+		Seo:        seo,
 	}
 
 	// Render the page and send it as an HTTP response
 	t.RenderPageAndSend(w, r)
 }
 
-type ShowcaseForm struct {
-	Name string
-}
-
-type Response struct {
-	Result string
-	Errors map[string]string
+type ShowcaseFormResult struct {
+	NameError string
+	Result    string
 }
 
 func HandleShowcaseFormPost(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
+
 	if err != nil {
 		http.Error(w, "Sorry, something went wrong", http.StatusInternalServerError)
 	}
-
-	res := Response{
-		Errors: map[string]string{},
-	}
+	data := ShowcaseFormResult{}
 
 	if len(r.PostForm.Get("Name")) < 1 {
-		res.Errors["Name"] = "Name is required"
+		data.NameError = "Name is required"
 	} else {
 		if r.PostForm.Get("Name") == "Bruce Wayne" {
-			res.Result = "You're Batman"
+			data.Result = "You're Batman"
 		} else {
-			res.Result = "You're not Batman"
+			data.Result = "You're not Batman"
 		}
 	}
 
-	t := mwtemp.FragmentTemplate{
+	t := temp.FragmentTemplate{
 		Files:     []string{"components/showcaseForm"},
 		BlockName: "showcaseForm",
-		Data:      res,
+		Data:      data,
 	}
 
 	t.RenderFragmentAndSend(w, r)

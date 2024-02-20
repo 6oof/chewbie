@@ -1,4 +1,4 @@
-package mwtemp
+package temp
 
 import (
 	"bytes"
@@ -9,13 +9,6 @@ import (
 	"github.com/6oof/minweb/app/helpers"
 	"github.com/gorilla/csrf"
 )
-
-type Seo struct {
-	Name        string // if none is given it will be taken from .env NAME field
-	Title       string
-	Description string // if none is given it will be taken from .env DESCRIPTION field
-	Keywords    string
-}
 
 // PageTemplate represents a structured template for rendering entire pages. It encapsulates the necessary information to render a page,
 // including the list of template files and additional data to be used in the template execution.
@@ -33,7 +26,7 @@ type PageTemplate struct {
 	Layout     string      // Optional layout file to be rendered form ./views/layouts without file extension;
 	Page       string      //File name of the page to be rendered inside ./views/pages without file extension;
 	Components []string    // Relative paths to template files of components inside ./views/components without file extension;
-	Seo        Seo         // SEO data
+	Seo        helpers.Seo // SEO data
 	Data       interface{} // Data to be used in the template
 }
 
@@ -54,7 +47,7 @@ type FragmentTemplate struct {
 }
 
 // RenderPage generates the HTML content for the specified PageTemplate and returns it as a string. Any data can be accesed in the template via {{.Data}}
-func (p PageTemplate) RenderPage(r *http.Request) (string, error) {
+func (p PageTemplate) RenderPage(r *http.Request) (*bytes.Buffer, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Components {
 		p.Components[i] = "./views/components/" + v + ".go.html"
@@ -82,37 +75,32 @@ func (p PageTemplate) RenderPage(r *http.Request) (string, error) {
 	// Parse the template files
 	ts, err := ts.ParseFiles(completeFiles...)
 	if err != nil {
-		return "", fmt.Errorf("error parsing template files: %v", err)
+		return &bytes.Buffer{}, fmt.Errorf("error parsing template files: %v", err)
 	}
 
 	// Set default SEO values if not provided
-	if p.Seo.Name == "" {
-		p.Seo.Name = helpers.EnvOrPanic("NAME")
-	}
-	fmt.Print(p.Seo.Name)
-
-	if p.Seo.Description == "" {
-		p.Seo.Description = helpers.Env("DESCRIPTION", "App created with Miniweb")
+	if !p.Seo.Ready {
+		p.Seo = helpers.BaseSeo()
 	}
 
 	data := map[string]interface{}{
-		"Seo":  p.Seo,
-		"Data": p.Data,
+		"seo":  p.Seo,
 		"CSRF": csrf.TemplateField(r),
+		"data": p.Data,
 	}
 
 	var contentBuffer bytes.Buffer
 	err = ts.ExecuteTemplate(&contentBuffer, "layout", data)
 	if err != nil {
-		return "", fmt.Errorf("error executing template: %v", err)
+		return &bytes.Buffer{}, fmt.Errorf("error executing template: %v", err)
 	}
 
-	return contentBuffer.String(), nil
+	return &contentBuffer, nil
 }
 
 // RenderPageAndSend generates the HTML content for the specified PageTemplate and sends it as an HTTP response.
 func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter, r *http.Request) {
-	html, err := p.RenderPage(r)
+	contentBuffer, err := p.RenderPage(r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "text/html")
@@ -121,11 +109,11 @@ func (p PageTemplate) RenderPageAndSend(w http.ResponseWriter, r *http.Request) 
 	// Send the HTML response
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(html))
+	contentBuffer.WriteTo(w)
 }
 
-// RenderFragment generates the HTML content for the specified FragmentTemplate and returns it as a string.
-func (p FragmentTemplate) RenderFragment(r *http.Request) (string, error) {
+// RenderFragment generates the HTML content for the specified FragmentTemplate and returns it as a contentBuffer.
+func (p FragmentTemplate) RenderFragment(r *http.Request) (*bytes.Buffer, error) {
 	// Prepend the correct path to the template files
 	for i, v := range p.Files {
 		p.Files[i] = "./views/" + v + ".go.html"
@@ -140,34 +128,36 @@ func (p FragmentTemplate) RenderFragment(r *http.Request) (string, error) {
 	// Parse the template files
 	ts, err := ts.ParseFiles(p.Files...)
 	if err != nil {
-		return "", fmt.Errorf("error parsing template files: %v", err)
+		return &bytes.Buffer{}, fmt.Errorf("error parsing template files: %v", err)
 	}
 
 	var contentBuffer bytes.Buffer
 
 	data := map[string]interface{}{
-		"Data": p.Data,
 		"CSRF": csrf.TemplateField(r),
+		"data": p.Data,
 	}
 
 	err = ts.ExecuteTemplate(&contentBuffer, p.BlockName, data)
 	if err != nil {
-		return "", fmt.Errorf("error executing template: %v", err)
+		return &bytes.Buffer{}, fmt.Errorf("error executing template: %v", err)
 	}
 
-	return contentBuffer.String(), nil
+	return &contentBuffer, nil
 }
 
 // RenderFragmentAndSend generates the HTML content for the specified FragmentTemplate and sends it as an HTTP response.
 func (p FragmentTemplate) RenderFragmentAndSend(w http.ResponseWriter, r *http.Request) {
-	html, err := p.RenderFragment(r)
+	contentBuffer, err := p.RenderFragment(r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "text/html")
 		w.Write([]byte(fmt.Sprint(err)))
+		return
 	}
+
 	// Send the HTML response
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/html")
-	w.Write([]byte(html))
+	contentBuffer.WriteTo(w)
 }

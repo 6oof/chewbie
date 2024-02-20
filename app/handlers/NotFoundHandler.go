@@ -3,19 +3,26 @@ package handlers
 import (
 	"net/http"
 
-	mwtemp "github.com/6oof/minweb/app/helpers/templateEngine"
+	"github.com/6oof/minweb/app/helpers"
+	"github.com/6oof/minweb/app/helpers/temp"
 )
 
+type NotFoundData struct {
+	Code    int
+	Message string
+}
+
 func HandleNotFound(w http.ResponseWriter, r *http.Request) {
-	t := mwtemp.PageTemplate{
+	seo := helpers.BaseSeo()
+	seo.Title = "Page Not Found"
+
+	t := temp.PageTemplate{
 		Layout: "empty",
 		Page:   "error",
-		Seo: mwtemp.Seo{
-			Title: "Page Not Found",
-		},
-		Data: map[string]interface{}{
-			"code":    404,
-			"message": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+		Seo:    seo,
+		Data: NotFoundData{
+			Code:    404,
+			Message: "The page you are looking for does not exist.",
 		},
 	}
 
